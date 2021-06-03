@@ -1,3 +1,4 @@
+from django.http.response import HttpResponse
 from django.shortcuts import render
 
 from . import util
@@ -16,3 +17,7 @@ def display_entry(request, name):
             {"name": name, "content": content},
         )
     return render(request, "encyclopedia/error.html", {"name": name})
+
+
+def search(request):
+    return HttpResponse("test")

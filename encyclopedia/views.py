@@ -20,4 +20,11 @@ def display_entry(request, name):
 
 
 def search(request):
-    return HttpResponse("test")
+    searched_entry = request.GET.get("q", "")
+    for name in util.list_entries():
+        if searched_entry.casefold() == name.casefold():
+            return render(
+                request,
+                "encyclopedia/display_entry.html",
+                {"name": name, "content": util.get_entry(name)},
+            )

@@ -23,19 +23,18 @@ def search(request):
     searched_entry = request.GET.get("q", "")
     matches = []
 
-    # if the search matches an entry
     for name in util.list_entries():
+        # if the search matches an entry
         if searched_entry.casefold() == name.casefold():
             return render(
                 request,
                 "encyclopedia/display_entry.html",
                 {"name": name, "content": util.get_entry(name)},
             )
-
-    # if the search is a substring of 1 or more entries
-    for name in util.list_entries():
+        # if the search is a substring of an entry
         if searched_entry.casefold() in name.casefold():
             matches.append(name)
+
     if len(matches) > 0:
         return render(
             request,

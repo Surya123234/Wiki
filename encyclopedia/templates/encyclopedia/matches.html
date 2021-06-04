@@ -6,7 +6,11 @@
 
 {% block body %}
     <h1>Search Results for "{{ name }}"</h1>
-    <p>[{{ matches|length }} Results Found]</p>
+    {% if matches|length > 1 %}
+        <p>[{{ matches|length }} Results Found]</p>
+    {% else %}
+        <p>[{{ matches|length }} Result Found]</p>
+    {% endif %}
     <hr>
     <ul>
         {% for entry in matches %}

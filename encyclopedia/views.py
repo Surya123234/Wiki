@@ -21,6 +21,9 @@ def display_entry(request, name):
 
 def search(request):
     searched_entry = request.GET.get("q", "")
+    matches = []
+
+    # if the search matches an entry
     for name in util.list_entries():
         if searched_entry.casefold() == name.casefold():
             return render(
@@ -28,3 +31,17 @@ def search(request):
                 "encyclopedia/display_entry.html",
                 {"name": name, "content": util.get_entry(name)},
             )
+
+    # if the search is a substring of 1 or more entries
+    for name in util.list_entries():
+        if searched_entry.casefold() in name.casefold():
+            matches.append(name)
+    if len(matches) > 0:
+        return render(
+            request,
+            "encyclopedia/matches.html",
+            {"name": searched_entry, "matches": matches},
+        )
+
+    # if the search does not exist as an entry or a substring of an entry
+    return render(request, "encyclopedia/error.html", {"name": searched_entry})

@@ -1,0 +1,18 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    results
+{% endblock %}
+
+{% block body %}
+    <h1>Search Results for "{{ name }}"</h1>
+    <p>[{{ matches|length }} Results Found]</p>
+    <hr>
+    <ul>
+        {% for entry in matches %}
+        <li>
+            <a href="http://127.0.0.1:8000/wiki/{{ entry }}">{{ entry }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

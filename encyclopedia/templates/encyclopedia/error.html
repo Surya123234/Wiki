@@ -5,5 +5,9 @@
 {% endblock %}
 
 {% block body %}
-    <h1>"{{ name }}" was not found!</h1>
+    {% if try_to_save %}
+        <h1>"{{ name }}" already exists as a page!</h1>
+    {% else %}
+        <h1>"{{ name }}" was not found!</h1>
+    {% endif %}
 {% endblock %}

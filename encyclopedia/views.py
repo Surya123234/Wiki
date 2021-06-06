@@ -1,7 +1,8 @@
-from django.http.response import HttpResponse
-from django.shortcuts import render
-
+from django.http.response import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect, render
+from .forms import newPageForm
 from . import util
+from django.urls import reverse
 
 
 def index(request):
@@ -16,7 +17,9 @@ def display_entry(request, name):
             "encyclopedia/display_entry.html",
             {"name": name, "content": content},
         )
-    return render(request, "encyclopedia/error.html", {"name": name})
+    return render(
+        request, "encyclopedia/error.html", {"name": name, "try_to_save": False}
+    )
 
 
 def search(request):
@@ -43,4 +46,37 @@ def search(request):
         )
 
     # if the search does not exist as an entry or a substring of an entry
-    return render(request, "encyclopedia/error.html", {"name": searched_entry})
+    return render(
+        request,
+        "encyclopedia/error.html",
+        {"name": searched_entry, "try_to_save": False},
+    )
+
+
+def new(request):
+    if request.method == "POST":
+        form = newPageForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            content = form.cleaned_data["content"]
+
+            # if the page already exists
+            for entry in util.list_entries():
+                if name.casefold() == entry.casefold():
+                    return render(
+                        request,
+                        "encyclopedia/error.html",
+                        {"name": name, "try_to_save": True},
+                    )
+            # if the page does NOT already exist
+            util.save_entry(name, content)
+            return render(
+                request,
+                "encyclopedia/display_entry.html",
+                {"name": name, "content": content},
+            )
+        else:
+            return render(request, "encyclopedia/new.html", {"form": form})
+
+    # if the request method was GET
+    return render(request, "encyclopedia/new.html", {"form": newPageForm()})

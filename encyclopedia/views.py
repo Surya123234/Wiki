@@ -1,4 +1,4 @@
-from django.http.response import HttpResponse, HttpResponseRedirect
+from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from .forms import newPageForm
 from . import util
@@ -29,11 +29,7 @@ def search(request):
     for name in util.list_entries():
         # if the search matches an entry
         if searched_entry.casefold() == name.casefold():
-            return render(
-                request,
-                "encyclopedia/display_entry.html",
-                {"name": name, "content": util.get_entry(name)},
-            )
+            return redirect(reverse("encyclopedia:display_entry", args=[name]))
         # if the search is a substring of an entry
         if searched_entry.casefold() in name.casefold():
             matches.append(name)
@@ -70,13 +66,13 @@ def new(request):
                     )
             # if the page does NOT already exist
             util.save_entry(name, content)
-            return render(
-                request,
-                "encyclopedia/display_entry.html",
-                {"name": name, "content": content},
-            )
+            return redirect(reverse("encyclopedia:display_entry", args=[name]))
         else:
             return render(request, "encyclopedia/new.html", {"form": form})
 
     # if the request method was GET
     return render(request, "encyclopedia/new.html", {"form": newPageForm()})
+
+
+def edit(request):
+    return HttpResponse("bruhh")

@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 from .forms import newPageForm
 from . import util
 from django.urls import reverse
+import random
 
 
 def index(request):
@@ -76,3 +77,8 @@ def new(request):
 
 def edit(request):
     return HttpResponse("bruhh")
+
+
+def random_page(request):
+    name = random.choice(util.list_entries())
+    return redirect(reverse("encyclopedia:display_entry", args=[name]))

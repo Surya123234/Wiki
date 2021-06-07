@@ -1,0 +1,1 @@
+I went to rick hansen secondary school for gr 11 and 12

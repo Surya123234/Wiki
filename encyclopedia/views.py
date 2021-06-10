@@ -76,7 +76,22 @@ def new(request):
 
 
 def edit(request):
-    return render(request, "encyclopedia/edit.html")
+    name = request.GET.get("q", "")
+    if name in util.list_entries():
+        content = util.get_entry(name)
+        return render(
+            request,
+            "encyclopedia/edit.html",
+            {
+                "name": name,
+                "content": content,
+                "form": newPageForm({"name": name, "content": content}),
+            },
+        )
+    else:
+        return render(
+            request, "encyclopedia/error.html", {"name": name, "try_to_save": False}
+        )
 
 
 def random_page(request):

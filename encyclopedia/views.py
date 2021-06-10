@@ -79,13 +79,14 @@ def edit(request):
     name = request.GET.get("q", "")
     if name in util.list_entries():
         content = util.get_entry(name)
+        filled_form_fields = {"name": name, "content": content}
         return render(
             request,
             "encyclopedia/edit.html",
             {
                 "name": name,
                 "content": content,
-                "form": newPageForm({"name": name, "content": content}),
+                "form": newPageForm(filled_form_fields),
             },
         )
     else:

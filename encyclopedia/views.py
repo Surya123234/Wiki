@@ -76,25 +76,34 @@ def new(request):
 
 
 def edit(request):
-    name = request.GET.get("q", "")
-    entries = util.list_entries()
-    for entry in entries:
-        if name.casefold() == entry.casefold():
-            content = util.get_entry(name)
-            filled_form_fields = {"name": entry, "content": content}
-            return render(
-                request,
-                "encyclopedia/edit.html",
-                {
-                    "name": name,
-                    "content": content,
-                    "form": newPageForm(filled_form_fields),
-                },
-            )
+    # Saving the edit
+    if request.method == "POST":
+        form = newPageForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            content = form.cleaned_data["content"]
+            util.save_entry(name, content)
+            return redirect(reverse("encyclopedia:display_entry", args=[name]))
+
+    # Accessing the edit page
     else:
-        return render(
-            request, "encyclopedia/error.html", {"name": name, "try_to_save": False}
-        )
+        name = request.GET.get("q", "")
+        entries = util.list_entries()
+        for entry in entries:
+            if name.casefold() == entry.casefold():
+                content = util.get_entry(name)
+                filled_form_fields = {"name": entry, "content": content}
+                form = newPageForm(filled_form_fields)
+                form.fields["name"].widget.attrs["readonly"] = True
+                return render(
+                    request,
+                    "encyclopedia/edit.html",
+                    {"name": name, "content": content, "form": form},
+                )
+        else:
+            return render(
+                request, "encyclopedia/error.html", {"name": name, "try_to_save": False}
+            )
 
 
 def random_page(request):

@@ -8,6 +8,6 @@
 <form action="{% url 'encyclopedia:edit' %}" method="POST">
     {% csrf_token %}
     {{ form }}
+    <button type="submit">Save</button>
 </form>
-    
 {% endblock %}

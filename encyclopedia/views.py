@@ -93,7 +93,7 @@ def edit(request):
             if name.casefold() == entry.casefold():
                 content = util.get_entry(name)
                 filled_form_fields = {"name": entry, "content": content}
-                form = newPageForm(filled_form_fields)
+                form = newPageForm(initial=filled_form_fields)
                 form.fields["name"].widget.attrs["readonly"] = True
                 return render(
                     request,

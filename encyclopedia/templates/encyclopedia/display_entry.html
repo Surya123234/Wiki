@@ -8,5 +8,9 @@
     <h1>{{ name }}</h1>
     <hr>
     <p>{{ content }}</p>
-    
+    <form action="{% url 'encyclopedia:edit' %}" method="GET">
+        <button type="submit" name="q" value="{{ name }}">
+            Edit Page
+        </button>
+    </form>
 {% endblock %}

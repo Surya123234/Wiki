@@ -76,7 +76,7 @@ def new(request):
 
 
 def edit(request):
-    return HttpResponse("bruhh")
+    return render(request, "encyclopedia/edit.html")
 
 
 def random_page(request):

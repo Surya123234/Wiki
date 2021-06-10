@@ -4,6 +4,7 @@ from .forms import newPageForm
 from . import util
 from django.urls import reverse
 import random
+import markdown2
 
 
 def index(request):
@@ -16,7 +17,7 @@ def display_entry(request, name):
         return render(
             request,
             "encyclopedia/display_entry.html",
-            {"name": name, "content": content},
+            {"name": name, "content": markdown2.markdown(content)},
         )
     return render(
         request, "encyclopedia/error.html", {"name": name, "try_to_save": False}
@@ -104,6 +105,12 @@ def edit(request):
             return render(
                 request, "encyclopedia/error.html", {"name": name, "try_to_save": False}
             )
+
+
+def delete(request):
+    name = request.GET.get("q", "")
+    util.delete_entry(name)
+    return redirect(reverse("encyclopedia:index"))
 
 
 def random_page(request):

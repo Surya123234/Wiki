@@ -2,6 +2,8 @@ import re
 
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.shortcuts import redirect
+from django.urls.base import reverse
 
 
 def list_entries():
@@ -9,8 +11,13 @@ def list_entries():
     Returns a list of all names of encyclopedia entries.
     """
     _, filenames = default_storage.listdir("entries")
-    return list(sorted(re.sub(r"\.md$", "", filename)
-                for filename in filenames if filename.endswith(".md")))
+    return list(
+        sorted(
+            re.sub(r"\.md$", "", filename)
+            for filename in filenames
+            if filename.endswith(".md")
+        )
+    )
 
 
 def save_entry(title, content):
@@ -23,6 +30,14 @@ def save_entry(title, content):
     if default_storage.exists(filename):
         default_storage.delete(filename)
     default_storage.save(filename, ContentFile(content))
+
+
+def delete_entry(title):
+    """
+    Deletes an encyclopedia entry, given its title
+    """
+    filename = f"entries/{title}.md"
+    default_storage.delete(filename)
 
 
 def get_entry(title):

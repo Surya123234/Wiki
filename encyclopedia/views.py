@@ -4,7 +4,9 @@ from .forms import newPageForm
 from . import util
 from django.urls import reverse
 import random
+from markdown2 import Markdown
 import markdown2
+from django import forms
 
 
 def index(request):
@@ -12,12 +14,13 @@ def index(request):
 
 
 def display_entry(request, name):
+    md = Markdown()
     content = util.get_entry(name)
     if content is not None:
         return render(
             request,
             "encyclopedia/display_entry.html",
-            {"name": name, "content": markdown2.markdown(content)},
+            {"name": name, "content": md.convert(content)},
         )
     return render(
         request, "encyclopedia/error.html", {"name": name, "try_to_save": False}

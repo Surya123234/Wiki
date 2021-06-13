@@ -9,12 +9,12 @@
     <hr>
     <p>{{ content|safe }}</p>
     <form action="{% url 'encyclopedia:edit' %}" method="GET">
-        <button type="submit" name="q" value="{{ name }}">
+        <button class="btn btn-warning" type="submit" name="q" value="{{ name }}">
             Edit Page
         </button>
     </form>
     <form action="{% url 'encyclopedia:delete' %}" method="GET">
-        <button type="submit" name="q" value="{{ name }}">
+        <button class="btn btn-danger" type="submit" name="q" value="{{ name }}">
             Delete Page
         </button>
     </form>

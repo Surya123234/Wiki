@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block body %}
-<form action="{% url 'encyclopedia:edit' %}" method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Save</button>
-</form>
+    <form action="{% url 'encyclopedia:edit' %}" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit" class="btn btn-info">Save</button>
+    </form>
 {% endblock %}
